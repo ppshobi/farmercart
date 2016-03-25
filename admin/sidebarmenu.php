@@ -13,6 +13,8 @@
                                 <li><a><i class="fa fa-edit"></i> Categories &amp; Products <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="addcat.php">Add Category</a>
+                                        </li>  
+                                        <li><a href="viewcategory.php">View all Category</a>
                                         </li>
                                         <li><a href="addprod.php">Add Product</a>
                                         </li>

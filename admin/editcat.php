@@ -1,6 +1,5 @@
 <?php session_start();
 include_once("../includes/dbconn.php");
-
 include_once("adminfunctions.php");
 
 if(isadminloggedin()){
@@ -10,16 +9,30 @@ else{
     header("location:login.php");
 }
 $seller=$_SESSION['farmercart_admin_id'];
+$catid=$_GET['catid'];
+?>
+<?php 
+updatecat($catid);
+
 ?>
 
 <?php
-//function to add category
 
-addcat();
+//gather content for selected category
+$cat='';
+$descr='';
+$sql= "SELECT * FROM category WHERE id = $catid";
+$result = mysqlexec($sql);
+if($result){
+    $row=mysqli_fetch_assoc($result);
+    $cat=$row['cat'];
+    $descr=$row['descr'];
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -125,103 +138,6 @@ addcat();
                             <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                         </div>
 
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="images/img.jpg" alt="">John Doe
-                                    <span class=" fa fa-angle-down"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-                                    <li><a href="javascript:;">  Profile</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">
-                                            <span class="badge bg-red pull-right">50%</span>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">Help</a>
-                                    </li>
-                                    <li><a href="login.php"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li role="presentation" class="dropdown">
-                                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="badge bg-green">6</span>
-                                </a>
-                                <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
-                                    <li>
-                                        <a>
-                                            <span class="image">
-                                        <img src="images/img.jpg" alt="Profile Image" />
-                                    </span>
-                                            <span>
-                                        <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                    </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image">
-                                        <img src="images/img.jpg" alt="Profile Image" />
-                                    </span>
-                                            <span>
-                                        <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                    </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image">
-                                        <img src="images/img.jpg" alt="Profile Image" />
-                                    </span>
-                                            <span>
-                                        <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                    </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image">
-                                        <img src="images/img.jpg" alt="Profile Image" />
-                                    </span>
-                                            <span>
-                                        <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                        Film festivals used to be do-or-die moments for movie makers. They were where... 
-                                    </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="text-center">
-                                            <a>
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-
-                        </ul>
                     </nav>
                 </div>
 
@@ -234,42 +150,47 @@ addcat();
 
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>Add A Category</h3>
+                            <h3>Edit Category</h3>
                         </div>
-                        
+                      
                     </div>
                     <div class="clearfix"></div>
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Category ID = <?php echo $catid;?></h2>
+                                   
+                                    <div class="clearfix"></div>
+                                </div>
                                 <div class="x_content">
                                     <br />
-                                    <form id="addcat" data-parsley-validate class="form-horizontal form-label-left" name="addcat" action="" method="post">
+                                    <form id="demo-form"  class="form-horizontal form-label-left" enctype="multipart/form-data" data-parsley-validate method="post">
 
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Category Name <span class="required">*</span>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Category Name<span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" name="catname" id="first-name" required="required" class="form-control col-md-7 col-xs-12" placeholder="Enter Name of Your Category">
+                                                <input type="text" name="cat"id="first-name" value="<?php echo $cat; ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
-                                          
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Category Description</label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <textarea name="catdescr"class="resizable_textarea form-control" style="width: 100%; overflow: hidden; word-wrap: break-word; resize: horizontal; height: 87px;">Enter a description for your category
-                                                </textarea>
+                                            <label for="message" class="control-label col-md-3 col-sm-3 col-xs-12">Category Description (20 chars min, 1000 max) :</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <textarea id="descr" required="required" class="form-control"  name="descr" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="1000" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long Description.." data-parsley-validation-threshold="10"><?php echo $descr; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                <button onclick="Goback()" class="btn btn-primary">Cancel</button>
-                                                <button type="submit" class="btn btn-success">Submit</button>
+                                                <a href="viewcategory.php"><button type="button" class="btn btn-primary">Cancel</button></a>
+                                                <button type="submit" class="btn btn-success">Update Category</button>
+                                                <a href="deletecat.php?catid=<?php echo $catid;?>"><button type="button" class="btn btn-danger">Delete Category</button></a>
                                             </div>
                                         </div>
 
                                     </form>
+
                                 </div>
                             </div>
                         </div>
@@ -286,10 +207,21 @@ addcat();
                         });
                     </script>
 
+
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">                            
+                            <!-- start form for validation -->
+                            <form id="demo-form2" data-parsley-validate>
+
+                            </form>
+                            <!-- end form for validations I don't know why the hell the validation doesnot work when removed -->
+                        </div>
+                    </div>
+                </div>
                 <!-- /page content -->
 
                 <!-- footer content -->
-               <?php include_once("footer.php");?>
+                <?php include_once("footer.php");?>
                 <!-- /footer content -->
 
             </div>
@@ -320,8 +252,9 @@ addcat();
         <!-- daterangepicker -->
         <script type="text/javascript" src="js/moment.min2.js"></script>
         <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
-        <!-- richtext editor -->
-        <script src="js/editor/bootstrap-wysiwyg.js"></script>
+        <!-- dropzone -->
+        <script src="js/dropzone/dropzone.js"></script>
+
         <script src="js/editor/external/jquery.hotkeys.js"></script>
         <script src="js/editor/external/google-code-prettify/prettify.js"></script>
         <!-- select2 -->
@@ -333,25 +266,7 @@ addcat();
         <script>
             autosize($('.resizable_textarea'));
         </script>
-        <!-- Autocomplete -->
-        <script type="text/javascript" src="js/autocomplete/countries.js"></script>
-        <script src="js/autocomplete/jquery.autocomplete.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                'use strict';
-                var countriesArray = $.map(countries, function (value, key) {
-                    return {
-                        value: value,
-                        data: key
-                    };
-                });
-                // Initialize autocomplete with custom appendTo:
-                $('#autocomplete-custom-append').autocomplete({
-                    lookup: countriesArray,
-                    appendTo: '#autocomplete-container'
-                });
-            });
-        </script>
+      
         <script src="js/custom.js"></script>
 
 
@@ -371,48 +286,10 @@ addcat();
             });
         </script>
         <!-- /select2 -->
-        <!-- input tags -->
-        <script>
-            function onAddTag(tag) {
-                alert("Added a tag: " + tag);
-            }
-
-            function onRemoveTag(tag) {
-                alert("Removed a tag: " + tag);
-            }
-
-            function onChangeTag(input, tag) {
-                alert("Changed a tag: " + tag);
-            }
-
-            $(function () {
-                $('#tags_1').tagsInput({
-                    width: 'auto'
-                });
-            });
-        </script>
-        <!-- /input tags -->
+        
         <!-- form validation -->
         <script type="text/javascript">
-            $(document).ready(function () {
-                $.listen('parsley:field:validate', function () {
-                    validateFront();
-                });
-                $('#demo-form .btn').on('click', function () {
-                    $('#demo-form').parsley().validate();
-                    validateFront();
-                });
-                var validateFront = function () {
-                    if (true === $('#demo-form').parsley().isValid()) {
-                        $('.bs-callout-info').removeClass('hidden');
-                        $('.bs-callout-warning').addClass('hidden');
-                    } else {
-                        $('.bs-callout-info').addClass('hidden');
-                        $('.bs-callout-warning').removeClass('hidden');
-                    }
-                };
-            });
-
+        
             $(document).ready(function () {
                 $.listen('parsley:field:validate', function () {
                     validateFront();
@@ -502,5 +379,4 @@ addcat();
         </script>
         <!-- /editor -->
 </body>
-
 </html>

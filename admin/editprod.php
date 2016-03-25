@@ -114,7 +114,7 @@ if($result){
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2>Anthony Fernando</h2>
+                            <h2>Farmercart Admin</h2>
                         </div>
                     </div>
                     <!-- /menu prile quick info -->

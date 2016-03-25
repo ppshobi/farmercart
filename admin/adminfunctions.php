@@ -77,6 +77,7 @@ function addcat(){
 	}
 
 }
+
 function updateproduct($prodid){
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$name=$_POST['name'];
@@ -93,6 +94,24 @@ function updateproduct($prodid){
 		$result=mysqlexec($sql);
 		if ($result) {
 			echo "<script>alert(\"Successfully Updated the Product\")</script>";
+		}
+		else{
+			echo  "Something gone wrong";
+		}
+		}
+
+
+}
+function updatecat($catid){
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		$cat=$_POST['cat'];
+		$descr=$_POST['descr'];	
+
+		$sql="UPDATE category SET cat='$cat', descr='$descr' WHERE id=$catid";
+
+		$result=mysqlexec($sql);
+		if ($result) {
+			echo "<script>alert(\"Successfully Updated the Category\")</script>";
 		}
 		else{
 			echo  "Something gone wrong";
@@ -125,7 +144,7 @@ function addprod(){
 		// $pic4=$verify[4];
 		// $pic5=$verify[5];
 //need to refactor this to a fucntion
-$sql="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'farmercart' AND TABLE_NAME = 'product'";
+	$sql="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'farmercart' AND TABLE_NAME = 'product'";
 		$result=mysqlexec($sql);
 
 		$row=mysqli_fetch_array($result);
@@ -179,8 +198,6 @@ $sql="SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 
 			echo  "Something gone wrong";
 		}
 		}
-
-
 		
 	}
 
@@ -237,4 +254,5 @@ function isadminloggedin(){
 		return false;
 	}
 }
+
 ?>

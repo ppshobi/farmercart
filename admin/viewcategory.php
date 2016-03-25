@@ -126,9 +126,9 @@ $seller=$_SESSION['farmercart_admin_id'];
                     <div class="page-title">
                         <div class="title_left">
                             <h3>
-                    View All Products
+                    View All Category
                     <small>
-                        View your products and edit them here.
+                        View your Category and edit them here.
                     </small>
                 </h3>
                         </div>
@@ -142,7 +142,7 @@ $seller=$_SESSION['farmercart_admin_id'];
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Product <small> Details</small></h2>
+                                    <h2>Category <small> Details</small></h2>
                                    
                                     <div class="clearfix"></div>
                                 </div>
@@ -151,36 +151,33 @@ $seller=$_SESSION['farmercart_admin_id'];
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Title</th>
+                                                <th>SL.No</th>
+                                                <th>Category Id</th>
                                                 <th>Category</th>
-                                                <th>Balance Qty</th>
+                                                <th>Description</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            //grab the product details from produc table
-                                            $sql="SELECT * FROM product";
+                                            //grab the Category details from produc table
+                                            $sql="SELECT * FROM category";
                                             $result=mysqlexec($sql);
                                             if ($result) {
+                                                $count=0;
                                                 while($row=mysqli_fetch_assoc($result)){
-                                                    $id=$row['id'];
-                                                    $name=$row['name'];
-                                                    $qty=$row['qty'];
-                                                    $catid=$row['category'];
+                                                    $count++;
+                                                    $catid=$row['id'];
+                                                    $cat=$row['cat'];
+                                                    $descr=$row['descr'];
                                                     //fetchin category from caegory table according to cat id
-                                                    $sql2="SELECT * FROM category WHERE id = $catid";
-                                                    $result2=mysqlexec($sql2);
-                                                    $row2=mysqli_fetch_assoc($result2);
-
                                                     //printing to html table
                                                     echo "<tr>";
-                                                        echo "<th scope=\"row\">". $id ."</th>";
-                                                        echo "<td>" . $name . "</td>";
-                                                        echo "<td>" . $row2['cat'] . "</td>";
-                                                        echo "<td>" . $qty . "</td>";
-                                                        echo "<td><a href=\"editprod.php?prodid={$id}\">" .  "Edit" .  "</a></td>";
+                                                        echo "<th scope=\"row\">". $count ."</th>";
+                                                        echo "<th scope=\"row\">". $catid ."</th>";
+                                                        echo "<td>" . $cat . "</td>";
+                                                        echo "<td>" . $descr . "</td>";
+                                                        echo "<td><a href=\"editcat.php?catid={$catid}\">" .  "Edit" .  "</a></td>";
                                                     echo "</tr>";
                                                 }
                                             
